@@ -68,17 +68,24 @@ def dfs(maze, x, y, endx, endy, visited, paths):
             dfs(maze, xx, yy, endx, endy, visited, paths)
 
 def maze_solver(maze, algo):
-    algorithms = {"dfs":dfs, 'bfs':bfs}
 
-    startx,starty=0,0
-    endx,endy=0,0
 
-    for i in range (len(maze)):
-        for j in range (len(maze[0])):
-            if (maze[i][j]=='S'):
-                startx,starty = i,j
-            elif maze[i][j]=='E':
-                endx,endy=i,j
+    startx,starty=-1,-1
+    endx,endy=-1,-1
+    try:
+        for i in range (len(maze)):
+            for j in range (len(maze[0])):
+                if (maze[i][j]=='S'):
+                    startx,starty = i,j
+                elif maze[i][j]=='E':
+                    endx,endy=i,j
+    except IndexError:
+        raise IndexError('Issue reading maze. Ensure maze is square')
+        
+    if (-1 in (startx, starty, endx, endy)):
+        raise ValueError ('Ensure that both S and E are in maze to denote start and end')
+        
+
     visited = [[False for i in range(len(maze[0]))] for j in range(len(maze))]
     maze[startx][starty] = "\033[0;31m"+maze[startx][starty] + "\x1b[0m"
     maze[endx][endy]= '\033[0;32m' + maze[endx][endy] + "\x1b[0m"
@@ -114,6 +121,10 @@ def maze_solver(maze, algo):
 def visualize(algo):
     maze = read_maze()
     p = maze_solver(maze, algo)
+
+    if p is None:
+        return
+    
     print_maze(maze)
 
     for c,i in enumerate(p):
@@ -131,5 +142,4 @@ def show_algos(algorithms = "dfs bfs"):
         visualize(algo) 
 
 if __name__== '__main__':
-    show_algos()
- 
+    show_algos('dfs bfs')
