@@ -7,7 +7,7 @@ def read_maze():
     output = []
     for i in maze:
         if (len(i)!=0):
-            output.append(list(i))
+            output.append(list(i.replace(' ','')))
     return output
 
 def print_maze(maze, endline = True):
@@ -27,7 +27,7 @@ def bfs(maze, startx, starty, endx, endy, visited):
         x = current_point[0]
         y = current_point[1]
         maze[x][y] = "\033[0;35m" + maze[x][y] + '\x1b[0m'
-        time.sleep(.05)
+       # time.sleep(.05)
         print_maze(maze)
 
         if (x==endx and y==endy):
@@ -51,7 +51,7 @@ def dfs(maze, x, y, endx, endy, visited, paths):
     ymoves = [1,-1,0,0]
     visited[x][y]=True
     maze[x][y] = "\033[0;35m" + maze[x][y] + '\x1b[0m'
-    time.sleep(.05)
+    #time.sleep(.05)
     print_maze(maze)
     if ((x,y) == (endx,endy) or (endx, endy) in paths):
         return
@@ -80,7 +80,7 @@ def maze_solver(maze, algo):
                 elif maze[i][j]=='E':
                     endx,endy=i,j
     except IndexError:
-        raise IndexError('Issue reading maze. Ensure maze is square')
+        raise IndexError('Issue reading maze. Ensure maze is rectangular')
         
     if (-1 in (startx, starty, endx, endy)):
         raise ValueError ('Ensure that both S and E are in maze to denote start and end')
@@ -107,7 +107,9 @@ def maze_solver(maze, algo):
         try:
             retrace = paths[retrace]
         except:
-            raise ValueError("NO VALID PATH FOUND")
+            print ("NO VALID PATH FOUND")
+            print_maze(maze, False)
+            return
         if (retrace!=(endx,endy) and retrace!=(startx,starty)):
             p.append(retrace)
  
@@ -128,7 +130,7 @@ def visualize(algo):
     print_maze(maze)
 
     for c,i in enumerate(p):
-        time.sleep(.05)
+        #time.sleep(.05)
         maze[i[0]][i[1]]= "\033[0;36m" + '%' + '\x1b[0m'
 
         if c==len(p)-1:
