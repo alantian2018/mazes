@@ -130,7 +130,7 @@ def visualize(algo):
     print_maze(maze)
 
     for c,i in enumerate(p):
-        #time.sleep(.05)
+        time.sleep(.05)
         maze[i[0]][i[1]]= "\033[0;36m" + '%' + '\x1b[0m'
 
         if c==len(p)-1:
